@@ -1,5 +1,12 @@
 # Reglas propuestas para contribuir
 
+## Rastro de verificación — Fase 1: Explorar la API (2026-10-10)
+
+- Iniciado el backend con `docker compose up --build -d backend`; se consultaron `/docs` y `/openapi.json` en `http://localhost:8000`.
+- Se exploraron `GET /api/metrics/categories/top`, `GET /api/metrics/comparison` y `GET /api/metrics/alerts`, incluyendo respuestas reales y filtros representativos. Se contrastaron parámetros y modelos de respuesta con OpenAPI.
+- Se documentaron los contratos y desajustes de terminología PM/API en `frontend/specs/top-categories.md`, `frontend/specs/period-comparison.md` y `frontend/specs/outcome-alerts.md`; no se modificó la implementación.
+- No se ejecutaron suites de pruebas: el cambio es documentación/specs solamente.
+
 Estas reglas son propuestas para futuros cambios. Cada una se basa en un hecho observable del repositorio.
 
 ## Arquitectura y responsabilidades
