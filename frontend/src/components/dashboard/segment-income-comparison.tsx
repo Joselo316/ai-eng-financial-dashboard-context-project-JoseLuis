@@ -1,7 +1,7 @@
 import type { BusinessType } from "@/lib/financial-types";
 import type { FinancialMovement } from "@/lib/financial-types";
-import type { TopCategoriesResponse } from "../../../spec/api-types";
-import type { DataRangeFilter, TopCategoriesParams } from "../../../spec/param-types";
+import type { TopCategoriesResponse } from "../../../specs/api-types";
+import type { DataRangeFilter, TopCategoriesParams } from "../../../specs/param-types";
 import { formatCurrency } from "@/lib/financial-utils";
 
 interface SegmentIncomeData {

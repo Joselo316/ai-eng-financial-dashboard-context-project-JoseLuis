@@ -1,5 +1,5 @@
-import type { AlertsParams } from "../../../spec/param-types";
-import type { AlertsResponse } from "../../../spec/api-types";
+import type { AlertsParams } from "../../../specs/param-types";
+import type { AlertsResponse } from "../../../specs/api-types";
 import { formatCurrency } from "@/lib/financial-utils";
 
 interface AlertsTableProps {

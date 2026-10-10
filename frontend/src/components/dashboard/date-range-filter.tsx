@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
-import type { DataRangeFilter, ISODateString } from "../../../spec/param-types";
-import type { FacetResponse } from "../../../spec/api-types";
+import type { DataRangeFilter, ISODateString } from "../../../specs/param-types";
+import type { FacetResponse } from "../../../specs/api-types";
 
 function isISODateString(value: string): value is ISODateString {
   return /^\d{4}-\d{2}-\d{2}$/.test(value);
