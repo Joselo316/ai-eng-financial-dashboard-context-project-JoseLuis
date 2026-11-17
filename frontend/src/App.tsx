@@ -1,14 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { KPIRow } from "@/components/dashboard/kpi-row";
-import { IncomeOutcomeChart } from "@/components/dashboard/income-outcome-chart";
-import { ProfitPercentChart } from "@/components/dashboard/profit-percent-chart";
 import {
   type FinancialMovement,
   type KPIMetrics,
   type MonthlyDataPoint,
 } from "@/lib/financial-types";
 import { computeKPIs, computeMonthlyData } from "@/lib/financial-utils";
+
+// Lazy load chart components (heavy dependencies: recharts)
+// Performance optimization: Code splitting for below-the-fold content
+const IncomeOutcomeChart = lazy(() =>
+  import("@/components/dashboard/income-outcome-chart").then((m) => ({
+    default: m.IncomeOutcomeChart,
+  }))
+);
+const ProfitPercentChart = lazy(() =>
+  import("@/components/dashboard/profit-percent-chart").then((m) => ({
+    default: m.ProfitPercentChart,
+  }))
+);
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
@@ -30,19 +41,23 @@ function App() {
     : "Financial period";
 
   useEffect(() => {
-    fetchFinancialData()
-      .then((movements) => {
-        setMetrics(computeKPIs(movements));
-        setMonthlyData(computeMonthlyData(movements));
-      })
-      .catch(() => {
+    (async () => {
+      try {
+        const movements = await fetchFinancialData();
+        const [metrics, monthlyData] = await Promise.all([
+          Promise.resolve(computeKPIs(movements)),
+          Promise.resolve(computeMonthlyData(movements))
+        ]);
+        setMetrics(metrics);
+        setMonthlyData(monthlyData);
+      } catch {
         setError(
           "No se pudo cargar la informacion financiera. Revisa la API de backend.",
         );
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    })();
   }, []);
 
   return (
@@ -61,13 +76,15 @@ function App() {
             <KPIRow metrics={metrics} loading={loading} />
           </section>
 
-          <section
-            aria-label="Financial charts"
-            className="grid grid-cols-1 gap-4 xl:grid-cols-2"
-          >
-            <IncomeOutcomeChart data={monthlyData} loading={loading} />
-            <ProfitPercentChart data={monthlyData} loading={loading} />
-          </section>
+          <Suspense fallback={<div className="text-muted-foreground">Cargando gráficos...</div>}>
+            <section
+              aria-label="Financial charts"
+              className="grid grid-cols-1 gap-4 xl:grid-cols-2"
+            >
+              <IncomeOutcomeChart data={monthlyData} loading={loading} />
+              <ProfitPercentChart data={monthlyData} loading={loading} />
+            </section>
+          </Suspense>
         </div>
       </div>
     </main>

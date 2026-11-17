@@ -1,13 +1,13 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
-import { type LucideIcon } from 'lucide-react'
+import { type ReactNode } from 'react'
 
 interface KPICardProps {
   label: string
   value: string
   helperText: string
-  icon: LucideIcon
+  icon: ReactNode
   variant: 'income' | 'outcome' | 'profit' | 'profitPercent'
   loading?: boolean
 }
@@ -31,7 +31,7 @@ const variantStyles: Record<KPICardProps['variant'], { badge: string; icon: stri
   },
 }
 
-export function KPICard({ label, value, helperText, icon: Icon, variant, loading }: KPICardProps) {
+export function KPICard({ label, value, helperText, icon, variant, loading }: KPICardProps) {
   const styles = variantStyles[variant]
 
   if (loading) {
@@ -56,8 +56,10 @@ export function KPICard({ label, value, helperText, icon: Icon, variant, loading
           <span className="text-sm font-medium text-muted-foreground tracking-wide uppercase text-pretty">
             {label}
           </span>
-          <span className={cn('p-1.5 rounded-lg', styles.badge)}>
-            <Icon size={16} className={styles.icon} />
+          <span className={cn('p-1.5 rounded-lg', styles.badge)} aria-label={label}>
+            <span className={styles.icon} aria-hidden="true">
+              {icon}
+            </span>
           </span>
         </div>
         <p className="text-3xl font-semibold tracking-tight text-foreground">{value}</p>
