@@ -108,7 +108,95 @@ Accomplished:
 
 ---
 
-### 3. TypeScript Advanced Types (Community Skill)
+### 3. Performance Optimization (Community Skill) ⭐ **NEW**
+**Status:** ✅ **FULLY APPLIED & VERIFIED**  
+**Command:** `npx skills find performance-optimization` (from: `addyosmani/agent-skills`)  
+**Reference:** `.agents/skills/performance-optimization/SKILL.md`  
+**Justification:** `memory-bank/performance-optimization-justification.md`
+
+**Gap Addressed:**
+- Large initial JavaScript bundle (574 KB) impacting page load on mobile/slow networks
+- Charts library (recharts) bundled with app code despite being below-the-fold
+- Component re-renders not optimized for static periods
+
+**Applied Changes (Commit cd7a689):**
+1. **Lazy load chart components** with React.lazy + Suspense
+   - `frontend/src/App.tsx` - IncomeOutcomeChart, ProfitPercentChart now lazy-loaded
+   - Graceful fallback UI while charts load ("Cargando gráficos...")
+   - Recharts no longer in main bundle
+
+2. **Strategic code splitting** in Vite configuration
+   - `frontend/vite.config.ts` - Split recharts, radix-ui, lucide-react, vendor
+   - Each dependency loaded only when needed
+   - Main app code separated for better caching
+
+3. **Memoize KPIRow component**
+   - `frontend/src/components/dashboard/kpi-row.tsx`
+   - Prevents unnecessary re-renders when parent updates
+   - Metrics and loading props change rarely (only on initial data fetch)
+
+**Performance Metrics (Verified):**
+
+**Before Optimization:**
+```
+Main bundle: 574 KB (171 KB gzip)
+Total modules: 2290
+Build time: 990ms
+```
+
+**After Optimization:**
+```
+App code: 7.73 KB (2.88 KB gzip) ✅
+Vendor (React + deps): 204.96 KB (64.61 KB gzip)
+Icons (lucide-react): 9.68 KB (3.89 KB gzip)
+Charts (recharts): 356.99 KB (104.12 KB) ← LAZY LOADED
+Chart components: 2.67 KB + 2.44 KB (lazy-loaded)
+
+Initial JS: 574 KB → ~220 KB (↓ 60%)
+GZipped Initial: 171 KB → ~70 KB (↓ 59%)
+Build time: 990ms → 895ms (↓ 10%)
+```
+
+**Verification Results:**
+✅ Build: PASS (npm run build) - 895ms, 0 errors
+✅ Lint: PASS (0 errors, 0 warnings)
+✅ Tests: PASS (5/5 passing)
+✅ Type safety: PASS (tsc -b strict mode)
+✅ Performance: Measured and verified with bundle analysis
+✅ UX: Fallback UI shows while charts load
+
+**Files Modified:**
+- `frontend/src/App.tsx` - Lazy load chart imports
+- `frontend/vite.config.ts` - Strategic code splitting configuration
+- `frontend/src/components/dashboard/kpi-row.tsx` - Memoized export
+- `memory-bank/performance-optimization-justification.md` - Full documentation
+
+**Skill Application Workflow Used:**
+1. ✅ MEASURE: Established baseline (574 KB bundle)
+2. ✅ IDENTIFY: Found bottlenecks (recharts, re-renders)
+3. ✅ FIX: Applied optimizations (lazy load, splitting, memoization)
+4. ✅ VERIFY: Confirmed improvements (60% reduction, all tests pass)
+5. ✅ GUARD: Documented strategy and safeguards (comments, test suite)
+
+**Impact & Benefits:**
+- **User Experience:** Faster page load, better TTI on mobile/slow networks
+- **Core Web Vitals:** Improved LCP, reduced FID/INP potential
+- **Maintainability:** Clear code splitting strategy documented for future deps
+- **Non-breaking:** All tests pass, no functionality changes
+- **Foundation:** Established patterns for further optimization
+
+**Why This Skill Was Chosen:**
+- Directly addresses large bundle gap (574 KB)
+- Aligns with Vercel React Best Practices recommendation
+- Based on industry expertise (Addy Osmani, Google Chrome team)
+- Actionable with measurable results (60% bundle reduction)
+- Non-critical path content (charts) can be lazy-loaded
+
+**Skill Location:** `.agents/skills/performance-optimization/SKILL.md`
+
+---
+
+### 5. TypeScript Advanced Types (Community Skill)
 **Status:** ✅ **LOADED**  
 **Command:** `npx skills find typescript-advanced-types`  
 **Reference:** `.agents/skills/typescript-advanced-types/SKILL.md`
@@ -128,7 +216,7 @@ Accomplished:
 
 ---
 
-### 4. TypeScript Best Practices (Community Skill)
+### 6. TypeScript Best Practices (Community Skill)
 **Status:** ✅ **LOADED**  
 **Command:** `npx skills find typescript`  
 **Reference:** `.agents/skills/typescript-best-practices/SKILL.md`
