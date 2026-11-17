@@ -24,13 +24,33 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Split lucide-react into its own chunk to improve tree-shaking
-          // See: vercel-react-best-practices -> bundle-barrel-imports
-          if (id.includes('node_modules/lucide-react')) {
-            return 'lucide-react';
+          // Performance optimization: Strategic code splitting
+          // Keep main bundle focused on above-the-fold content (KPIs)
+          // Split heavy charting libraries into separate chunks
+
+          // Split recharts (charting library, used in lazy-loaded components)
+          if (id.includes("node_modules/recharts")) {
+            return "recharts";
+          }
+
+          // Split lucide-react (icons) for better tree-shaking
+          if (id.includes("node_modules/lucide-react")) {
+            return "lucide-react";
+          }
+
+          // Split Radix UI components
+          if (id.includes("node_modules/@radix-ui")) {
+            return "radix-ui";
+          }
+
+          // Keep vendor code separate from app code
+          if (id.includes("node_modules/")) {
+            return "vendor";
           }
         },
       },
     },
+    // Performance target: Keep initial JS bundle under 200KB gzipped
+    chunkSizeWarningLimit: 500,
   },
 });
