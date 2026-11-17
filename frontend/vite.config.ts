@@ -20,4 +20,17 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          // Split lucide-react into its own chunk to improve tree-shaking
+          // See: vercel-react-best-practices -> bundle-barrel-imports
+          if (id.includes('node_modules/lucide-react')) {
+            return 'lucide-react';
+          }
+        },
+      },
+    },
+  },
 });

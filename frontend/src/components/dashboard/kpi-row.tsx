@@ -1,7 +1,7 @@
 import { KPICard } from './kpi-card'
 import { type KPIMetrics } from '@/lib/financial-types'
 import { formatCurrency, formatPercent } from '@/lib/financial-utils'
-import { TrendingUp, TrendingDown, DollarSign, BarChart2 } from 'lucide-react'
+import { TrendingUp, TrendingDown, DollarSign, BarChart2 } from 'lucide-react';
 
 interface KPIRowProps {
   metrics: KPIMetrics | null
@@ -15,7 +15,7 @@ export function KPIRow({ metrics, loading }: KPIRowProps) {
         label="Total Income"
         value={metrics ? formatCurrency(metrics.totalIncome) : '—'}
         helperText="Cumulative revenue from all income movements"
-        icon={TrendingUp}
+        icon={<TrendingUp size={16} />}
         variant="income"
         loading={loading}
       />
@@ -23,7 +23,7 @@ export function KPIRow({ metrics, loading }: KPIRowProps) {
         label="Total Outcome"
         value={metrics ? formatCurrency(metrics.totalOutcome) : '—'}
         helperText="Total expenditure across all categories"
-        icon={TrendingDown}
+        icon={<TrendingDown size={16} />}
         variant="outcome"
         loading={loading}
       />
@@ -31,7 +31,7 @@ export function KPIRow({ metrics, loading }: KPIRowProps) {
         label="Profit"
         value={metrics ? formatCurrency(metrics.profit) : '—'}
         helperText="Net profit — income minus total outcome"
-        icon={DollarSign}
+        icon={<DollarSign size={16} />}
         variant="profit"
         loading={loading}
       />
@@ -39,7 +39,7 @@ export function KPIRow({ metrics, loading }: KPIRowProps) {
         label="Profit Margin"
         value={metrics ? formatPercent(metrics.profitPercent) : '—'}
         helperText="Profit as a percentage of total income"
-        icon={BarChart2}
+        icon={<BarChart2 size={16} />}
         variant="profitPercent"
         loading={loading}
       />

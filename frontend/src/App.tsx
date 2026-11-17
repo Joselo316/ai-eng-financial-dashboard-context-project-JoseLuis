@@ -30,19 +30,23 @@ function App() {
     : "Financial period";
 
   useEffect(() => {
-    fetchFinancialData()
-      .then((movements) => {
-        setMetrics(computeKPIs(movements));
-        setMonthlyData(computeMonthlyData(movements));
-      })
-      .catch(() => {
+    (async () => {
+      try {
+        const movements = await fetchFinancialData();
+        const [metrics, monthlyData] = await Promise.all([
+          Promise.resolve(computeKPIs(movements)),
+          Promise.resolve(computeMonthlyData(movements))
+        ]);
+        setMetrics(metrics);
+        setMonthlyData(monthlyData);
+      } catch {
         setError(
           "No se pudo cargar la informacion financiera. Revisa la API de backend.",
         );
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    })();
   }, []);
 
   return (
